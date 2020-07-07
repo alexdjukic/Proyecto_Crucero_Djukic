@@ -4,6 +4,7 @@ from Sencilla import Sencilla
 from Premium import Premium
 from Vip import Vip
 from Cliente import Cliente 
+from Tour import Tour
 
 def is_prime(doc_identidad,i = 2):
     aux = True
