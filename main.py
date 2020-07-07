@@ -120,6 +120,47 @@ def vender():
             clientes.append(cliente)
             i += 1
 
+def vender_tour(clientes):
+    aux = True
+    while aux == True:
+        try:
+            dni = int(input("Introduzca su dni: "))
+            if dni > 0:
+                aux = False
+            else:
+                print("Introduzca un dni valido")
+        except ValueError:
+            print("Introduzca un dni valido")
+    found = False
+    for cliente in clientes:
+        if dni == cliente.DNI():
+            found = True
+
+    if found == False:
+        print("El cliente no esta registrado en ningun crucero")
+    
+    aux = True
+    while aux == True:
+        print("""------- Tipos de tour disponibles -------
+                 1.- Tour en el puerto:
+                       Precio: 30$ c/u
+                       Hora: 7 A.M
+                 2.- Degustacion de comida:
+                       Precio: 100$ c/u
+                       Hora: 12 P.M
+                 3.- Trote por el pueblo:
+                       Precio: Gratis
+                       Hora: 6 A.M
+                 4.- Visita a lugares historicos: 
+                       Precio: 40$ c/u
+                       Hora: 10 A.M""")
+        pass
+
+              
+
+
+
+        
 
 
         

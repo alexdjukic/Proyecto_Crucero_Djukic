@@ -20,6 +20,9 @@ class Cliente():
                 IVA: {}$
                 Monto total a pagar: {}$
                 """.format(self.nombre,self.identidad,self.edad,self.habitacion,self.monto,self.descuento,iva,total)
+
+    def DNI(self):
+        return self.identidad
     
         
         
