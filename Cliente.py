@@ -1,9 +1,10 @@
 class Cliente():
-    def __init__(self,nombre,identidad,edad,habitacion,monto,descuento):
+    def __init__(self,nombre,identidad,edad,crucero,habitacion,monto,descuento):
         self.nombre = nombre
         self.identidad = identidad
         self.edad = edad
         self.habitacion = habitacion
+        self.crucero = crucero
         self.monto = monto 
         self.descuento = descuento
     
@@ -23,6 +24,9 @@ class Cliente():
 
     def DNI(self):
         return self.identidad
+
+    def Crucero(self):
+        return self.crucero
     
         
         
