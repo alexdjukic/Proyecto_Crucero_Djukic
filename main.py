@@ -88,6 +88,8 @@ def vender(cruceros):
     registro = False
     while registro == False:
         if i == viajeros:
+            for crucero in cruceros:
+                crucero.Cupos(viajeros)
             return clientes
         else:
             aux = True

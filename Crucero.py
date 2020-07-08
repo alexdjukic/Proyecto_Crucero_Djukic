@@ -1,16 +1,20 @@
 from Tour import Tour
 class Crucero():
-    def __init__(self,nombre,ruta,fecha,capacidad,cantidad_sencilla,cantidad_premium,cantidad_vip):
+    def __init__(self,nombre,ruta,fecha,boletos,cantidad_sencilla,cantidad_premium,cantidad_vip):
         self.nombre = nombre
         self.ruta = ruta
         self.fecha = fecha
-        self.capacidad = capacidad
+        self.boletos = boletos
         self.cantidad_sencilla = cantidad_sencilla
         self.cantidad_premium = cantidad_premium
         self.cantidad_vip = cantidad_vip
     
     def Cupos(self,clientes):
-        self.capacidad -= clientes
+        if self.boletos == 0:
+            return "No hay mas cupos en este barco"
+        else:
+            self.boletos -= clientes
+            return "Se han registrado a los {} viajeros en el {}".format(clientes,self.nombre)
 
     def Info_Barco(self):
         return """   ------- Infromacion del Barco -------
@@ -18,12 +22,12 @@ class Crucero():
                     Nombre : {}
                     Ruta: {}
                     Fecha de Salida: {}
-                    Capacidad: {} Personas
+                    Boletos Disponibles: {} 
                     Cantidad de habitaciones Sencillas: {}
                     Cantidad de habitaciones Premium: {}
                     Cantidad de habitaciones VIP: {}
                     
-                    """.format(self.nombre,self.ruta,self.fecha,self.capacidad,self.cantidad_sencilla,self.cantidad_premium,self.cantidad_vip)
+                    """.format(self.nombre,self.ruta,self.fecha,self.boletos,self.cantidad_sencilla,self.cantidad_premium,self.cantidad_vip)
     def Nombre(self):
         return self.nombre
 

@@ -4,6 +4,7 @@ class Tour():
         self.precio = precio
         self.capacidad = capacidad
         self.hora = hora
+    
     def Nombre(self):
         return self.tipo
 
