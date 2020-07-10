@@ -1,4 +1,5 @@
 from Tour import Tour
+from Restaurante import Restaurante
 class Crucero():
     def __init__(self,nombre,ruta,fecha,boletos,cantidad_sencilla,cantidad_premium,cantidad_vip):
         self.nombre = nombre
@@ -37,5 +38,9 @@ class Crucero():
         tours.append(puerto)
 
         return tours
+    
+    def Restaurante(self):
+        restaurante = Restaurante()
+        return restaurante
 
     

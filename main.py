@@ -186,15 +186,9 @@ def vender_tour(tours,clientes):
             print("Seleccione una opcion valida")
                 
             
-
+def restaurante(restaurante):
+    pass
               
-
-
-
-        
-
-
-        
 
 def main():
     #aqui todo lo del proyecto crucero
@@ -204,6 +198,7 @@ def main():
     cruceros.append(crucero)
     for crucero in cruceros:
         tours = crucero.Tours()
+        restaurante = crucero.Restaurante()
     while fin == False:
         print("BIENVENIDO A SAMAN CRUCEROS")
         clientes = vender(cruceros)
