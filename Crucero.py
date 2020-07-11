@@ -1,7 +1,7 @@
 from Tour import Tour
 from Restaurante import Restaurante
 class Crucero():
-    def __init__(self,nombre,ruta,fecha,boletos,cantidad_sencilla,cantidad_premium,cantidad_vip):
+    def __init__(self,nombre,ruta,fecha,boletos,cantidad_sencilla,cantidad_premium,cantidad_vip,tours = [],restaurante = False):
         self.nombre = nombre
         self.ruta = ruta
         self.fecha = fecha
@@ -9,6 +9,9 @@ class Crucero():
         self.cantidad_sencilla = cantidad_sencilla
         self.cantidad_premium = cantidad_premium
         self.cantidad_vip = cantidad_vip
+        self.tours = tours
+        self.restaurante = restaurante
+
     
     def Cupos(self,clientes):
         if self.boletos == 0:
@@ -33,14 +36,18 @@ class Crucero():
         return self.nombre
 
     def Tours(self):
-        tours = []
-        puerto = Tour("Tour Puerto",30,10,"7 Am")
-        tours.append(puerto)
-
-        return tours
+        if len(self.tours) == 0:
+            puerto = Tour("Tour Puerto",30,10,"7 Am")
+            self.tours.append(puerto)
+            return self.tours
+        else:
+            return self.tours
     
     def Restaurante(self):
-        restaurante = Restaurante()
-        return restaurante
+        if self.restaurante == False:
+            self.restaurante = Restaurante()
+            return self.restaurante
+        else:
+            return self.restaurante
 
     
