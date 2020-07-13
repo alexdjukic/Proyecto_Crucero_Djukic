@@ -39,6 +39,12 @@ class Crucero():
         if len(self.tours) == 0:
             puerto = Tour("Tour Puerto",30,10,"7 Am")
             self.tours.append(puerto)
+            comida = Tour("Degustacion",100,100,"12 Pm")
+            self.tours.append(comida)
+            trote = Tour("Trote",0,1000,"6 Am")
+            self.tours.append(trote)
+            historia = Tour("Lugares Historicos",40,15,"10 Am")
+            self.tours.append(historia)
             return self.tours
         else:
             return self.tours

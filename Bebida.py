@@ -3,11 +3,17 @@ class Bebida(Plato):
     def __init__(self,nombre,clasificacion,precio,size):
         self.size = size
         super().__init__(nombre,clasificacion,precio)
+    
+    def Nombre(self):
+        return self.nombre
+    
+    def Size(self):
+        return self.size
 
     def Info(self):
         return """------ Informacion del Platillo ------
                     Nombre: {}
                     Clasificacion: {}
-                    Precio: {}
+                    Precio + IVA: {}$
                     Tamaño: {}
                     """.format(self.nombre,self.clasificacion,self.precio,self.size)

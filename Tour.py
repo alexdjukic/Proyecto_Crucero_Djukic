@@ -14,3 +14,4 @@ class Tour():
         else:
             self.capacidad -= clientes
             return "Se ha registrado a los {} viajeros al tour".format(clientes)
+           

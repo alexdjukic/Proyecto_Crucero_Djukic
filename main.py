@@ -185,38 +185,91 @@ def vender_tour(clientes,cruceros):
             for tour in tours:
                 if nombre == tour.Nombre():
                     return tour.Cupos(personas)
+        elif seleccion == 2:
+            aux2 = True
+            while aux2 == True:
+                try:
+                    personas = int(input("Cuntas personas van al tour: "))
+                    if personas > 0:
+                        aux2 = False
+                except ValueError:
+                    print("Introduzca un numero de perosnas valido")
+            
+            nombre = "Degustacion"
+            for tour in tours:
+                if nombre == tour.Nombre():
+                    return tour.Cupos(personas)
+        elif seleccion == 3:
+            aux2 = True
+            while aux2 == True:
+                try:
+                    personas = int(input("Cuntas personas van al tour: "))
+                    if personas > 0:
+                        aux2 = False
+                except ValueError:
+                    print("Introduzca un numero de perosnas valido")
+            
+            nombre = "Trote"
+            for tour in tours:
+                if nombre == tour.Nombre():
+                    return tour.Cupos(personas)
+        elif seleccion == 4:
+            aux2 = True
+            while aux2 == True:
+                try:
+                    personas = int(input("Cuntas personas van al tour: "))
+                    if personas > 0:
+                        aux2 = False
+                except ValueError:
+                    print("Introduzca un numero de perosnas valido")
+            
+            nombre = "Lugares Historicos"
+            for tour in tours:
+                if nombre == tour.Nombre():
+                    return tour.Cupos(personas)
+
         else:
             print("Seleccione una opcion valida")
                 
             
 def restaurante(cruceros):
     aux = True
+    found = False
     while aux == True:
-        barco = input("Inreoduzca el nombre de su barco: ").lower()
+        barco = input("Inroduzca el nombre de su barco: ").lower()
         if barco.isalpha:
-            aux = False
+            for crucero in cruceros:
+                if barco == crucero.Nombre():
+                    found = True
+            if found  == True:
+                restaurante = Restaurante()
+                aux = False
+            else:
+                print("No se ha encontrado un barco con ese nombre")
         else:
             print("Introduzca un nombre de barco valido")
-    for crucero in cruceros:
-        if barco == crucero.Nombre():
-            restaurante = crucero.Restaurante()
-    
     aux = True
     while aux == True:
-        opcion = input("Introduzca (1) para agregar un platillo: ")
+        opcion = input("Introduzca (1) para agregar un platillo, (2) para revisar el menu, (3) para eliminar un platillo del menu, (4) Para salir del modulo de resturantes: ")
         if opcion == "1":
             aux2 = True
             while aux2 == True:
                 print(restaurante.Add_Platillo())
-                again = input("desea agragar otro platillo?: ").lower()
+                again = input("esea agragar otro platillo o  revisar el menu?: ").lower()
                 if again == "no":
-                    print("Gracias por su asistencia")
+                    return "Gracias por su asistencia"
                     aux2 = False
                     aux = False
                 elif again == "si":
                     aux2 = False
                 else:
-                    print("Introduzca si o no ")
+                    print("Introduzca si o no")
+        elif opcion == "2":
+            print(restaurante.Check_Menu())
+        elif opcion == "3":
+            print(restaurante.Eliminar_Platillo())
+        elif opcion == "4":
+            return "Gracias por su asistencia"
             
               
 
