@@ -1,8 +1,8 @@
 from Plato import Plato
 class Alimento(Plato):
-    def __init__(self,nombre,clasificacion,precio,metodo):
+    def __init__(self,nombre,clasificacion,precio,cantidad,metodo):
         self.metodo = metodo
-        super().__init__(nombre,clasificacion,precio)
+        super().__init__(nombre,clasificacion,precio,cantidad)
     
     def Nombre(self):
         return self.nombre

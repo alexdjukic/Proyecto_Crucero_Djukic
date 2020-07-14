@@ -6,6 +6,7 @@ from Vip import Vip
 from Cliente import Cliente 
 from Tour import Tour
 from Restaurante import Restaurante
+import requests
 
 def is_prime(doc_identidad,i = 2):
     aux = True
@@ -64,12 +65,71 @@ def descuentos(monto,doc_identidad,edad):
         return descuento
 
 
-
+def cruceros_disponibles(cruceros):
+    cruceros_disponibes = []
+    for crucero in cruceros:
+        nombre = crucero["name"]
+        ruta = crucero["route"]
+        fecha = crucero["departure"]
+        cantidad_sencilla = int(crucero["capacity"]["simple"])
+        costo_simple = float(crucero["cost"]["simple"])
+        cantidad_premium = int(crucero["capacity"]["premium"])
+        costo_premium = float(crucero["cost"]["premium"])
+        cantidad_vip = int(crucero["capacity"]["vip"])
+        costo_vip = float(crucero["cost"]["vip"])
+        barco = Crucero(nombre,ruta,fecha,cantidad_sencilla,costo_simple,cantidad_premium,costo_premium,cantidad_vip,costo_vip)
+        cruceros_disponibes.append(barco)
+    
+    return cruceros_disponibes
 
 def vender(cruceros):
-    for crucero in cruceros:
-        print(crucero.Info_Barco())
-        barco = crucero.Nombre()
+    barcos = cruceros_disponibles(cruceros)
+    aux = True
+    while aux == True:
+        opcion= int(input("Desea comprar su boleto por (1) nombre del barco, (2) ruta del barco o (3) desea ver los cruceros disponibles:  "))
+        if opcion == 1:
+            found = False
+            nombre = input("Introduzca el nombre del barco: ").lower()
+            for crucero in barcos:
+                if crucero.Nombre().lower() == nombre:
+                    found = True
+                    nombre_barco = crucero.Nombre()
+                    print(crucero.Info_Barco())
+                    aux = False
+            if found == False:
+                print("no se encontro un crucero con ese nombre")
+
+        elif opcion == 2:
+            found = False
+            salida = input("Introduzca el lugar de partida de su preferencia: ").lower()
+            for crucero in barcos:
+                ruta = crucero.Ruta()
+                if ruta[0].lower() == salida:
+                    found = True
+                    nombre_barco = crucero.Nombre()
+                    print(crucero.Info_Barco())
+                    aux = False
+            if found == False:
+                print("No se encontro crucero con ese punto de salida")
+
+        elif opcion == 3:
+            found = False
+            for i,crucero in enumerate(barcos):
+                print(f"{i+1} {crucero.Info_Barco()}")
+            seleccion = int(input("Seleccion el barco de su preferencia: "))
+            for i,crucero in enumerate(barcos):
+                if i+1 == seleccion:
+                    found = True
+                    nombre_barco = crucero.Nombre()
+                    print(f" Usted selecciono {crucero.Info_Barco()}")
+                    aux = False
+            if found == False:
+                print("Introduzca un numero valido")
+
+        else:
+            print("Introduzca una opcion valida")
+
+
     aux = True
     while aux == True:
         try:
@@ -122,7 +182,7 @@ def vender(cruceros):
                     print("Introduzca una edad valida")
             total += monto
             descuento = descuentos(total,doc_identidad,edad)
-            cliente = Cliente(nombre,doc_identidad,edad,barco,habitacion,monto,descuento)
+            cliente = Cliente(nombre,doc_identidad,edad,nombre_barco,habitacion,monto,descuento)
             clientes.append(cliente)
             i += 1
 
@@ -270,15 +330,16 @@ def restaurante(cruceros):
             print(restaurante.Eliminar_Platillo())
         elif opcion == "4":
             return "Gracias por su asistencia"
-            
-              
+
+def crucero_API():
+    url = 'https://saman-caribbean.vercel.app/api/cruise-ships'
+    response = requests.request("GET",url)
+    return response.json()
 
 def main():
     #aqui todo lo del proyecto crucero
     fin = False
-    cruceros = []
-    crucero = Crucero("royal","bahamas","22/7/20",100,30,20,5)
-    cruceros.append(crucero)
+    cruceros = crucero_API()
     while fin == False:
         print("BIENVENIDO A SAMAN CRUCEROS")
         aux = True
