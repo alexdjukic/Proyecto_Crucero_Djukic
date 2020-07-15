@@ -1,6 +1,7 @@
 from Plato import Plato
 from Alimento import Alimento
 from Bebida import Bebida
+from Combo import Combo
 class Restaurante():
     def __init__(self,menu = []):
         self.menu = menu
@@ -27,7 +28,16 @@ class Restaurante():
             while aux == True:
                 clasificacion = input("Es un alimento o una bebida?: ").lower()
                 if clasificacion == "alimento":
-                    clasificacion = "Alimento"
+                    aux1 = True
+                    while aux1 == True:
+                        try:
+                            cantidad = int(input("Cuantos desea agregar?: "))
+                            if cantidad > 0:
+                                aux1 = False
+                            else:
+                                print("Introduzca una cantidad valida")
+                        except ValueError:
+                            print("introduzca una cantidad valida")
                     aux1 = True
                     while aux1 == True:
                         metodo = input(" El aliemento es de (1) Empaque o (2) Preparacion: ")
@@ -38,7 +48,7 @@ class Restaurante():
                                 if platillo.Nombre() == nombre and platillo.Metodo() == metodo:
                                     item = True
                             if item == False:
-                                platillo = Alimento(nombre,clasificacion,precio,metodo)
+                                platillo = Alimento(nombre,precio,cantidad,metodo)
                                 self.menu.append(platillo)
                                 aux = False
                                 aux1 = False
@@ -52,7 +62,7 @@ class Restaurante():
                                 if platillo.Nombre() == nombre and platillo.Metodo() == metodo:
                                     item = True
                             if item == False:
-                                platillo = Alimento(nombre,clasificacion,precio,metodo)
+                                platillo = Alimento(nombre,precio,cantidad,metodo)
                                 self.menu.append(platillo)
                                 aux = False
                                 aux1 = False
@@ -62,7 +72,16 @@ class Restaurante():
                         else:
                             print("Introduzca un metodo valido")
                 elif clasificacion == "bebida":
-                    clasificacion = "Bebida"
+                    aux1 = True
+                    while aux1 == True:
+                        try:
+                            cantidad = int(input("Cuantos desea agregar?: "))
+                            if cantidad > 0:
+                                aux1 = False
+                            else:
+                                print("Introduzca una cantidad valida")
+                        except ValueError:
+                            print("introduzca una cantidad valida")
                     aux1 = True
                     while aux1 == True:
                         size = input("Indique el tamaño de la bebida: ").lower()
@@ -72,7 +91,7 @@ class Restaurante():
                                 if platillo.Nombre() == nombre and platillo.Size() == size:
                                     item = True
                             if item == False:
-                                platillo = Bebida(nombre,clasificacion,precio,size)
+                                platillo = Bebida(nombre,precio,cantidad,size)
                                 self.menu.append(platillo)
                                 aux1 = False
                                 aux = False
@@ -85,7 +104,7 @@ class Restaurante():
                                 if platillo.Nombre() == nombre and platillo.Size() == size:
                                     item = True
                             if item == False:
-                                platillo = Bebida(nombre,clasificacion,precio,size)
+                                platillo = Bebida(nombre,precio,cantidad,size)
                                 self.menu.append(platillo)
                                 aux1 = False
                                 aux = False
@@ -98,7 +117,7 @@ class Restaurante():
                                 if platillo.Nombre() == nombre and platillo.Size() == size:
                                     item = True
                             if item == False:
-                                platillo = Bebida(nombre,clasificacion,precio,size)
+                                platillo = Bebida(nombre,precio,cantidad,size)
                                 self.menu.append(platillo)
                                 aux1 = False
                                 aux = False
@@ -111,10 +130,98 @@ class Restaurante():
                     print("Introduzca una clasificacion valida")
         if platillo == True:
             return "El platillo ha sido agregado"
+    
+    def Add_Combo(self):
+        aux = True
+        while aux == True:
+            nombre = input("Introduzca el nombre del combo: ").lower()
+            aux = False
+        aux = True
+        while aux == True:
+            try:
+                precio = float(input("introduzca el precio del combo: "))
+                if precio > 0:
+                    aux = False
+                else:
+                    print("Introduzca un precio valido")
+            except ValueError:
+                print("Introduzca un precio valido")
+        aux = True
+        while aux == True:
+            try:
+                cantidad = int(input("Cuantos de estos combos desea agregar: "))
+                if cantidad > 0:
+                    aux = False
+                else:
+                    print("Introduzca una cantidad valida")
+            except ValueError:
+               print("Introduzca una cantidad valida")
+        aux = True
+        platillos = []
+        i = 0
+        while aux == True:
+            if i == 2:
+                combo = Combo(nombre,precio,cantidad,platillos)
+                self.menu.append(combo)
+                aux = False
+            else:
+                print(self.Check_Menu())
+                aux1 =  True
+                while aux1 == True:
+                    item = input("Introduzca el nombre de un platillo que desee agregar al combo: ").lower()
+                    if item in platillos:
+                        print("El platillo ya esta agregado al combo")
+                    else:
+                        clasificacion = int(input("Presiona (1) si es un alimento o (2) si es una bebida: "))
+                        if clasificacion == 1:
+                            metodo = int(input("Presione (1) si es de empaque o (2) si es preparado"))
+                            if metodo == 1:
+                                metodo = "empaque"
+                                for platillo in self.menu:
+                                    if platillo.Nombre() == nombre and platillo.Metodo() == metodo:
+                                        platillos.append(platillo)
+                                        i += 1
+                                        aux1 = False
+                            elif metodo == 2:
+                                metodo = "preparacion"
+                                for platillo in self.menu:
+                                    if platillo.Nombre() == nombre and platillo.Metodo() == metodo:
+                                        platillos.append(platillo)
+                                        i += 1
+                                        aux1 = False
+                            else:
+                                print("Introduzca un metodo de preparaciuon valido")
+                        
+                        elif clasificacion == 2:
+                            size = int(input("Presione (1) si es de tamaño pequeño, (2) si es mediano o (3) si es grande: "))
+                            if size == 1:
+                                size = "pequeño"
+                                for platillo in self.menu:
+                                    if platillo.Nombre() == nombre and platillo.Size() == size:
+                                        platillos.append(platillo)
+                                        i += 1
+                                        aux1 = False
+                            elif size == 2:
+                                size = "mediano"
+                                for platillo in self.menu:
+                                    if platillo.Nombre() == nombre and platillo.Size() == size:
+                                        platillos.append(platillo)
+                                        i += 1
+                                        aux1 = False
+                            elif size == 3:
+                                size = "grande"
+                                for platillo in self.menu:
+                                    if platillo.Nombre() == nombre and platillo.Size() == size:
+                                        platillos.append(platillo)
+                                        i += 1
+                                        aux1 = False
+                            else:
+                                print("introduzca un metodo de preparacion valido")
+
 
     def Check_Menu(self):
-        for platillo in self.menu:
-            print(platillo.Info())
+        for i,platillo in enumerate(self.menu):
+            print(f"{i} {platillo.Info()}")
     
     def Eliminar_Platillo(self):
         for platillo in self.menu:
@@ -137,7 +244,7 @@ class Restaurante():
                     while aux2 == True:
                         metodo = int(input("Presiona (1) si el alimento es de empque o (2) si es preparado: "))
                         if metodo == 1:
-                            metodo = "Empaque"
+                            metodo = "empaque"
                             for alimento in self.menu:
                                 if alimento.Nombre() == nombre and alimento.Metodo() == metodo:
                                     found = True
@@ -147,7 +254,7 @@ class Restaurante():
                             else:
                                 return "El platillo ha sido eliminado del menu"
                         elif metodo == 2:
-                            metodo = "Preparacion"
+                            metodo = "preparacion"
                             for alimento in self.menu:
                                 if alimento.Nombre() == nombre and  alimento.Metodo() == metodo:
                                     found = True
@@ -193,6 +300,10 @@ class Restaurante():
                             print("Introduzca un tamaño valido")
                 else:
                     print("Ingrese si es alimento o bebida")
+    
+
+    
+
 
 
 

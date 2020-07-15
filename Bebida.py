@@ -1,19 +1,19 @@
 from Plato import Plato
 class Bebida(Plato):
-    def __init__(self,nombre,clasificacion,precio,cantidad,size):
+    def __init__(self,nombre,precio,cantidad,size,clasificacion = "bebida"):
         self.size = size
-        super().__init__(nombre,clasificacion,precio,cantidad)
+        super().__init__(nombre,precio,cantidad,clasificacion)
     
     def Nombre(self):
-        return self.nombre
+        return self.nombre.lower()
     
     def Size(self):
-        return self.size
+        return self.size.lower()
 
     def Info(self):
         return """------ Informacion del Platillo ------
                     Nombre: {}
-                    Clasificacion: {}
                     Precio + IVA: {}$
+                    Cantidad: {}
                     Tamaño: {}
-                    """.format(self.nombre,self.clasificacion,self.precio,self.size)
+                    """.format(self.nombre,self.precio,self.cantidad,self.size)

@@ -31,7 +31,7 @@ class Crucero():
                     
                     """
     def Nombre(self):
-        return self.nombre
+        return self.nombre.lower()
     
     def Ruta(self):
         return self.ruta

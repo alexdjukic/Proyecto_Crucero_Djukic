@@ -82,8 +82,7 @@ def cruceros_disponibles(cruceros):
     
     return cruceros_disponibes
 
-def vender(cruceros):
-    barcos = cruceros_disponibles(cruceros)
+def vender(barcos):
     aux = True
     while aux == True:
         opcion= int(input("Desea comprar su boleto por (1) nombre del barco, (2) ruta del barco o (3) desea ver los cruceros disponibles:  "))
@@ -186,7 +185,7 @@ def vender(cruceros):
             clientes.append(cliente)
             i += 1
 
-def vender_tour(clientes,cruceros):
+def vender_tour(clientes,barcos):
     aux = True
     while aux == True:
         barco = input("Inreoduzca el nombre de su barco: ").lower()
@@ -194,7 +193,7 @@ def vender_tour(clientes,cruceros):
             aux = False
         else:
             print("Introduzca un nombre de barco valido")
-    for crucero in cruceros:
+    for crucero in barcos:
         if barco == crucero.Nombre():
             tours = crucero.Tours()
     aux = True
@@ -292,43 +291,49 @@ def vender_tour(clientes,cruceros):
             print("Seleccione una opcion valida")
                 
             
-def restaurante(cruceros):
+def restaurante(barcos):
     aux = True
     found = False
     while aux == True:
         barco = input("Inroduzca el nombre de su barco: ").lower()
-        if barco.isalpha:
-            for crucero in cruceros:
-                if barco == crucero.Nombre():
-                    found = True
-            if found  == True:
-                restaurante = Restaurante()
-                aux = False
-            else:
-                print("No se ha encontrado un barco con ese nombre")
+        for crucero in barcos:
+            if barco == crucero.Nombre():
+                found = True
+        if found  == True:
+            restaurante = Restaurante()
+            aux = False
         else:
-            print("Introduzca un nombre de barco valido")
+            print("No se ha encontrado un barco con ese nombre")
     aux = True
     while aux == True:
-        opcion = input("Introduzca (1) para agregar un platillo, (2) para revisar el menu, (3) para eliminar un platillo del menu, (4) Para salir del modulo de resturantes: ")
+        opcion = input("Introduzca (1) para agregar un platillo,(2) Agregar un combo, (3) para revisar el menu, (4) para eliminar un platillo del menu, (5) Para salir del modulo de resturantes: ")
         if opcion == "1":
             aux2 = True
             while aux2 == True:
                 print(restaurante.Add_Platillo())
-                again = input("esea agragar otro platillo o  revisar el menu?: ").lower()
+                again = input("esea agragar otro platillo o realizar otra accion dentro del modulo?: ").lower()
                 if again == "no":
                     return "Gracias por su asistencia"
-                    aux2 = False
-                    aux = False
                 elif again == "si":
                     aux2 = False
                 else:
                     print("Introduzca si o no")
         elif opcion == "2":
-            print(restaurante.Check_Menu())
+            aux2 = True
+            while aux2 == True:
+                print(restaurante.Add_Combo())
+                again = input("esea agragar otro combo o realizar otra accion dento del modulo?: ").lower()
+                if again == "no":
+                    return "Gracias por su asistencia"
+                elif again == "si":
+                    aux2 = False
+                else:
+                    print("Introduzca si o no")
         elif opcion == "3":
-            print(restaurante.Eliminar_Platillo())
+            print(restaurante.Check_Menu())
         elif opcion == "4":
+            print(restaurante.Eliminar_Platillo())
+        elif opcion == "5":
             return "Gracias por su asistencia"
 
 def crucero_API():
@@ -340,21 +345,22 @@ def main():
     #aqui todo lo del proyecto crucero
     fin = False
     cruceros = crucero_API()
+    barcos = cruceros_disponibles(cruceros)
     while fin == False:
         print("BIENVENIDO A SAMAN CRUCEROS")
         aux = True
         while aux == True:
             opcion = input("Introduzca (1) para comprar un boleto, (2) para comprar un tour o (3) para el modulo de restaurantes: ")
             if opcion == "1":       
-                clientes = vender(cruceros)
+                clientes = vender(barcos)
                 for cliente in clientes:
                     print(cliente.Factura())
                 aux = False
             elif opcion == "2":      
-                print(vender_tour(clientes,cruceros))
+                print(vender_tour(clientes,barcos))
                 aux = False
             elif opcion == "3":
-                print(restaurante(cruceros))
+                print(restaurante(barcos))
                 aux = False
             else:
                 print("Introduzca una opcion valida")

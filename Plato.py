@@ -1,6 +1,6 @@
 class Plato():
-    def __init__(self,nombre,clasificacion,precio,cantidad):
+    def __init__(self,nombre,precio,cantidad,clasificacion):
         self.nombre = nombre
-        self.clasificacion = clasificacion
         self.precio = precio
         self.cantidad = cantidad
+        self.clasificacion = clasificacion
