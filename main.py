@@ -7,6 +7,7 @@ from Cliente import Cliente
 from Tour import Tour
 from Restaurante import Restaurante
 import requests
+import numpy as np
 
 def is_prime(doc_identidad,i = 2):
     aux = True
@@ -71,21 +72,51 @@ def cruceros_disponibles(cruceros):
         nombre = crucero["name"]
         ruta = crucero["route"]
         fecha = crucero["departure"]
+        n_habitaciones = crucero["rooms"]
         cantidad_sencilla = int(crucero["capacity"]["simple"])
         costo_simple = float(crucero["cost"]["simple"])
         cantidad_premium = int(crucero["capacity"]["premium"])
         costo_premium = float(crucero["cost"]["premium"])
         cantidad_vip = int(crucero["capacity"]["vip"])
         costo_vip = float(crucero["cost"]["vip"])
-        barco = Crucero(nombre,ruta,fecha,cantidad_sencilla,costo_simple,cantidad_premium,costo_premium,cantidad_vip,costo_vip)
+        barco = Crucero(nombre,ruta,fecha,n_habitaciones,cantidad_sencilla,costo_simple,cantidad_premium,costo_premium,cantidad_vip,costo_vip)
         cruceros_disponibes.append(barco)
-    
     return cruceros_disponibes
+
+def habitaciones(type_hab,nombre_barco,barcos):
+    found = False
+    for crucero in barcos:
+        if nombre_barco == crucero.Nombre():
+            tupla = crucero.Type_Room(type_hab)
+            found = True
+    if found == False:
+        return "no se encontro barco con ese nombre"
+    else:
+        matrix = []
+        columna = []
+        pasillos = (tupla[0]*2)+1
+        habitaciones = tupla[1]
+        pasillo = "■"
+        letras = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
+        k = 0
+        for i in range(habitaciones):
+            k = 0
+            for j in range(pasillos):
+                if j == pasillos-1:
+                    matrix.append(columna)
+                    columna = []
+                else:
+                    if j % 2 == 0:
+                        columna.append(pasillo)
+                    else:
+                        columna.append(f"{letras[k]}{i+1}")
+                        k += 1
+        return matrix
 
 def vender(barcos):
     aux = True
     while aux == True:
-        opcion= int(input("Desea comprar su boleto por (1) nombre del barco, (2) ruta del barco o (3) desea ver los cruceros disponibles:  "))
+        opcion = int(input("Desea comprar su boleto por (1) nombre del barco, (2) ruta del barco o (3) desea ver los cruceros disponibles:  "))
         if opcion == 1:
             found = False
             nombre = input("Introduzca el nombre del barco: ").lower()
@@ -120,6 +151,7 @@ def vender(barcos):
                 if i+1 == seleccion:
                     found = True
                     nombre_barco = crucero.Nombre()
+                    print(nombre_barco)
                     print(f" Usted selecciono {crucero.Info_Barco()}")
                     aux = False
             if found == False:
@@ -127,6 +159,7 @@ def vender(barcos):
 
         else:
             print("Introduzca una opcion valida")
+        
 
 
     aux = True
@@ -140,15 +173,13 @@ def vender(barcos):
         except ValueError:
             print("Introduzca un numero de viajeros valido")
 
-    i = 0
     monto = 0
     total = 0
     clientes = []
-    habitacion = "A113"
     registro = False
     while registro == False:
         if i == viajeros:
-            for crucero in cruceros:
+            for crucero in barcos:
                 crucero.Cupos(viajeros)
             return clientes
         else:
@@ -179,6 +210,28 @@ def vender(barcos):
                         print("Introduzca una edad valida")
                 except ValueError:
                     print("Introduzca una edad valida")
+            aux = True
+            while aux == True:
+                type_hab = input("Introduzca (1) para habitacion sencilla, (2) para habitacion premium o (3) para habitacion vip:  ").lower()
+                if type_hab == "1":
+                    type_hab = "simple"
+                    matrix = habitaciones(type_hab,nombre_barco,barcos)
+                    aux = False
+                elif type_hab == "2":
+                    type_hab = "premium"
+                    matrix = habitaciones(type_hab,nombre_barco,barcos)
+                    aux = False
+                elif type_hab == "3":
+                    type_hab = "vip"
+                    matrix = habitaciones(type_hab,nombre_barco,barcos)
+                    aux = False
+                else:
+                    print("Introduzca una opcion valida")
+            for row in matrix:
+                for cell in row:
+                    print(cell, end=' ')
+                print()
+            habitacion = input("escriba la letra y el numero de la habitacion a seleccionar: ")
             total += monto
             descuento = descuentos(total,doc_identidad,edad)
             cliente = Cliente(nombre,doc_identidad,edad,nombre_barco,habitacion,monto,descuento)
@@ -188,7 +241,7 @@ def vender(barcos):
 def vender_tour(clientes,barcos):
     aux = True
     while aux == True:
-        barco = input("Inreoduzca el nombre de su barco: ").lower()
+        barco = input("Introduzca el nombre de su barco: ").lower()
         if barco.isalpha:
             aux = False
         else:
