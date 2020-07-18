@@ -83,35 +83,107 @@ def cruceros_disponibles(cruceros):
         cruceros_disponibes.append(barco)
     return cruceros_disponibes
 
-def habitaciones(type_hab,nombre_barco,barcos):
-    found = False
-    for crucero in barcos:
-        if nombre_barco == crucero.Nombre():
-            tupla = crucero.Type_Room(type_hab)
-            found = True
-    if found == False:
-        return "no se encontro barco con ese nombre"
-    else:
-        matrix = []
-        columna = []
-        pasillos = (tupla[0]*2)+1
-        habitaciones = tupla[1]
-        pasillo = "■"
-        letras = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
-        k = 0
-        for i in range(habitaciones):
-            k = 0
-            for j in range(pasillos):
-                if j == pasillos-1:
-                    matrix.append(columna)
-                    columna = []
+def complete_form():
+    aux = True
+    client = []
+    name = []
+    print("A continuacion se imprime el formulario de la persona que va a pagar")
+    while aux == True:
+        nombre = input("Introduzca su nombre: ").lower()
+        if nombre.isalpha:
+            name.append(nombre)
+            aux = False
+        else:
+            print("Introduzca un nombre valido")
+    aux = True
+    while aux == True:
+        apellido = input("Introduzca su apellido: ").lower()
+        if apellido.isalpha:
+            name.append(apellido)
+            aux = False
+        else:
+            print("Introduzca un apellido valido")
+    
+    name = " ".join(name)
+    client.append(name)
+    aux = True
+    while aux == True:
+        try:
+            edad = int(input("Introduzca su edad: "))
+            if edad > 18:
+                client.append(edad)
+                aux = False
+            else:
+                print("Introduzca una edad valida")
+        except ValueError:
+            print("Introduzca una edad valida")
+    aux = True
+    while aux == True:
+        try:
+            dni = int(input("Introduzca su DNI: "))
+            if dni > 0:
+                client.append(dni)
+                aux = False
+        except ValueError:
+            print("Introduzca un DNI valido")
+        
+    return client
+
+def rest_form(travelers):
+    travel = False
+    clients = []
+    i = 0
+    while travel == False:
+        if i == travelers:
+            return clients
+        else:
+            aux = True
+            client = []
+            name = []
+            print("A continuacion se imprime el formulario para los acompañantes")
+            while aux == True:
+                nombre = input("Introduzca su nombre: ").lower()
+                if nombre.isalpha:
+                    name.append(nombre)
+                    aux = False
                 else:
-                    if j % 2 == 0:
-                        columna.append(pasillo)
+                    print("Introduzca un nombre valido")
+            aux = True
+            while aux == True:
+                apellido = input("Introduzca su apellido: ").lower()
+                if apellido.isalpha:
+                    name.append(apellido)
+                    aux = False
+                else:
+                    print("Introduzca un apellido valido")
+            
+            name = " ".join(name)
+            client.append(name)
+            aux = True
+            while aux == True:
+                try:
+                    edad = int(input("Introduzca su edad: "))
+                    if edad > 0:
+                        client.append(edad)
+                        aux = False
                     else:
-                        columna.append(f"{letras[k]}{i+1}")
-                        k += 1
-        return matrix
+                        print("Introduzca una edad valida")
+                except ValueError:
+                    print("Introduzca una edad valida")
+            aux = True
+            while aux == True:
+                try:
+                    dni = int(input("Introduzca su DNI: "))
+                    if dni > 0:
+                        client.append(dni)
+                        aux = False
+                except ValueError:
+                    print("Introduzca un DNI valido")
+            i += 1
+            clients.append(client)
+            
+    
+
 
 def vender(barcos):
     aux = True
@@ -151,7 +223,6 @@ def vender(barcos):
                 if i+1 == seleccion:
                     found = True
                     nombre_barco = crucero.Nombre()
-                    print(nombre_barco)
                     print(f" Usted selecciono {crucero.Info_Barco()}")
                     aux = False
             if found == False:
@@ -159,84 +230,170 @@ def vender(barcos):
 
         else:
             print("Introduzca una opcion valida")
-        
-
-
+            
+    clientes = []
+    main_traveler = complete_form()
     aux = True
     while aux == True:
         try:
-            viajeros = int(input("Cuantas personas viajan en el crucero: "))
-            if viajeros > 0:
+            travelers = int(input("Introduzca el numero de personas que viajan con usted: "))
+            if travelers >= 0:
                 aux = False
             else:
-                print("Introduzca un numero de viajeros valido")
+                print("Introduzca un numero de acompañantes valido")
         except ValueError:
-            print("Introduzca un numero de viajeros valido")
+            print("Introduzca un numero de acompañantes valido")
 
-    monto = 0
-    total = 0
-    clientes = []
-    registro = False
-    while registro == False:
-        if i == viajeros:
+    side_travelers = rest_form(travelers)
+
+    aux = True
+    while aux == True:
+        print("Que tipo de habitacion desea comprar?")
+        seleccion = input("Presione (1) Sencilla, (2) para Premium o (3) para Vip: ")
+        if seleccion == "1":
+            room_type = "simple"
             for crucero in barcos:
-                crucero.Cupos(viajeros)
-            return clientes
-        else:
-            aux = True
-            while aux == True:
-                nombre = input("Introduzca su nombre: ").lower()
-                if nombre.isalpha:
-                    aux = False
-                else:
-                    print("introduzca un nombre valido")
-            aux = True
-            while aux == True:
-                try:
-                    doc_identidad = int(input("Introduzca el numero de su documento de identidad: "))
-                    if doc_identidad > 0:
+                if crucero.Nombre() == nombre_barco:
+                    info = crucero.Room_Info(room_type)
+            print(f"""------ Informacion del tipo de cuarto ------
+                        Capacidad: {info[0]} personas
+                        Precio: {info[1]}$
+                        Posee servicio al Cuarto """ )
+            if travelers > info[0]:
+                print("Debera comprar multiples habitaciones de este tipo")
+                aux2 = True
+                while aux2 == True:
+                    opcion = input("Desea comprar una habitacion mas grande? ").lower()
+                    if opcion == "no":
+                        rooms = round((travelers+1)/info[0])
+                        precio = info[1]*rooms
+                        for crucero in barcos:
+                            if crucero.Nombre() == nombre_barco:
+                                room = crucero.Room(room_type,rooms)
+                                aux2 = False
+                                aux = False
+                            elif opcion == "si":
+                                aux2 = False
+                            else:
+                                print("Introduzca si o no")
+            else:
+                rooms = 1
+                precio = info[1]
+                for crucero in barcos:
+                    if crucero.Nombre() == nombre_barco:
+                        room = crucero.Room(room_type,rooms)
                         aux = False
-                    else:
-                        print("Introduzca un documento de identidad valido")
-                except ValueError:
-                    print("Introduzca un documento de identidad valido")
-            aux = True
-            while aux == True:
-                try:
-                    edad = int(input("Introduzca su edad: "))
-                    if edad > 0:
-                        aux = False
-                    else:
-                        print("Introduzca una edad valida")
-                except ValueError:
-                    print("Introduzca una edad valida")
-            aux = True
-            while aux == True:
-                type_hab = input("Introduzca (1) para habitacion sencilla, (2) para habitacion premium o (3) para habitacion vip:  ").lower()
-                if type_hab == "1":
-                    type_hab = "simple"
-                    matrix = habitaciones(type_hab,nombre_barco,barcos)
-                    aux = False
-                elif type_hab == "2":
-                    type_hab = "premium"
-                    matrix = habitaciones(type_hab,nombre_barco,barcos)
-                    aux = False
-                elif type_hab == "3":
-                    type_hab = "vip"
-                    matrix = habitaciones(type_hab,nombre_barco,barcos)
-                    aux = False
+            if seleccion == "2":
+                room_type = "premium"
+                for crucero in barcos:
+                    if crucero.Nombre() == nombre_barco:
+                        info = crucero.Room_Info(room_type)
+                print(f"""------ Informacion del tipo de cuarto ------
+                            Capacidad: {info[0]} personas
+                            Precio: {info[1]}$
+                             Posee servicio al Cuarto """)
+                if travelers+1 > info[0]:
+                    print("Debera comprar multiples habitaciones de este tipo")
+                    aux2 = True
+                    while aux2 == True:
+                        opcion = input("Desea comprar una habitacion mas grande? ").lower()
+                        if opcion == "no":
+                            rooms = round((travelers+1)/info[0])
+                            precio = info[1]*rooms
+                            for crucero in barcos:
+                                if crucero.Nombre() == nombre_barco:
+                                    room = crucero.Room(room_type,rooms)
+
+                                aux2 = False
+                                aux = False
+                        elif opcion == "si":
+                            aux2 = False
+                        else:
+                            print("Introduzca si o no")
                 else:
-                    print("Introduzca una opcion valida")
-            for row in matrix:
-                for cell in row:
-                    print(cell, end=' ')
-                print()
-            habitacion = input("escriba la letra y el numero de la habitacion a seleccionar: ")
-            total += monto
-            descuento = descuentos(total,doc_identidad,edad)
-            cliente = Cliente(nombre,doc_identidad,edad,nombre_barco,habitacion,monto,descuento)
+                    rooms = 1
+                    precio = info[1]
+                    for crucero in barcos:
+                        if crucero.Nombre() == nombre_barco:
+                            room = crucero.Room(room_type,rooms)
+                    aux = False
+            if seleccion == "3":
+                room_type = "vip"
+                for crucero in barcos:
+                    if crucero.Nombre() == nombre_barco:
+                        info = crucero.Room_Info(room_type)
+                print(f"""------ Informacion del tipo de cuarto ------
+                            Capacidad: {info[0]} personas
+                            Precio: {info[1]}$
+                            Posee servicio al Cuarto """)
+                if travelers+1 > info[0]:
+                    print("Debera comprar multiples habitaciones de este tipo")
+                    aux2 = True
+                    while aux2 == True:
+                        opcion = input("Desea comprar una habitacion mas grande? ").lower()
+                        if opcion == "no":
+                            rooms = int((travelers+1)/info[0])
+                            precio = info[1]*rooms
+                            for crucero in barcos:
+                                if crucero.Nombre() == nombre_barco:
+                                    room = crucero.Room(room_type,rooms)
+                            aux2 = False
+                            aux = False
+                        elif opcion == "si":
+                            aux2 = False
+                        else:
+                            print("Introduzca si o no")
+                else:
+                    rooms = 1
+                    precio = info[1]
+                    for crucero in barcos:
+                        if crucero.Nombre() == nombre_barco:
+                            room = crucero.Room(room_type,rooms)
+                    aux = False
+    
+    if len(side_travelers) == 0:
+        descuento = descuentos(precio,main_traveler[2],main_traveler[1])
+        precio -= descuento
+        preico = round(precio)
+        cliente = Cliente(main_traveler[0],main_traveler[1],main_traveler[2],nombre_barco,room,precio,descuento)
+        clientes.append(cliente)
+        return clientes
+    
+    elif len(side_travelers) > 0:
+        p = 1
+        h = 0       
+        for i in range(len(side_travelers)):
+            name = side_travelers[i][0]
+            edad = side_travelers[i][1]
+            dni = side_travelers[i][2]
+            price = 0
+            discount = 0
+            if p % info[0] == 0 and len(room) != 1:
+                h += 1
+                habitacion = room[h]
+            else:
+                habitacion = room[h]
+            cliente = Cliente(name,edad,dni,nombre_barco,habitacion,price,discount)
             clientes.append(cliente)
-            i += 1
+            p += 1
+            descuento = descuentos(precio,side_travelers[i][2],side_travelers[i][1])
+            precio -= descuento
+                           
+        cliente = Cliente(main_traveler[0],main_traveler[1],main_traveler[2],nombre_barco,habitacion,precio,descuento)
+        clientes.append(cliente)
+        return clientes
+    
+    
+        
+
+
+
+
+                    
+
+
+
+
 
 def vender_tour(clientes,barcos):
     aux = True
