@@ -154,5 +154,8 @@ class Crucero():
             return self.restaurante
         else:
             return self.restaurante
+    
+    def Sells(self):
+        return self.sells
 
     

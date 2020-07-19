@@ -517,17 +517,18 @@ def restaurante(barcos):
                 found = True
         if found  == True:
             restaurante = Restaurante()
+            restaurante.API_Platillos(crucero.Sells())
             aux = False
         else:
             print("No se ha encontrado un barco con ese nombre")
     aux = True
     while aux == True:
-        opcion = input("Introduzca (1) para agregar un platillo,(2) Agregar un combo, (3) para revisar el menu, (4) para eliminar un platillo del menu, (5) Para salir del modulo de resturantes: ")
+        opcion = input("Introduzca (1) para agregar un platillo,(2) Agregar un combo, (3) Comprar, (4) para eliminar un platillo del menu,(5) para modificar un platillo o (6) Para salir del modulo de resturantes: ")
         if opcion == "1":
             aux2 = True
             while aux2 == True:
                 print(restaurante.Add_Platillo())
-                again = input("esea agragar otro platillo o realizar otra accion dentro del modulo?: ").lower()
+                again = input("Desea agragar otro platillo o realizar otra accion dentro del modulo?: ").lower()
                 if again == "no":
                     return "Gracias por su asistencia"
                 elif again == "si":
@@ -546,10 +547,21 @@ def restaurante(barcos):
                 else:
                     print("Introduzca si o no")
         elif opcion == "3":
-            print(restaurante.Check_Menu())
+            aux2 = True
+            while aux2 == True:
+                print(restaurante.Buy())
+                again = input("Desea comprar otro platillo del restaurante?: ").lower()
+                if again == "no":
+                    return "Gracias por su compra"
+                elif again == "si":
+                    aux2 = False
+                else:
+                    print("Introduzca si o no")
         elif opcion == "4":
             print(restaurante.Eliminar_Platillo())
         elif opcion == "5":
+            print(restaurante.Modificar())
+        elif opcion == "6":
             return "Gracias por su asistencia"
 
 def crucero_API():
