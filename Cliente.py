@@ -1,3 +1,4 @@
+from Tour import Tour
 class Cliente():
     def __init__(self,nombre,identidad,edad,crucero,habitacion,monto,descuento):
         self.nombre = nombre
@@ -27,6 +28,12 @@ class Cliente():
 
     def Crucero(self):
         return self.crucero
+    
+    def Monto(self,tour,personas):
+        precio = tour.Precio(personas)
+        self.monto += precio
+        print(precio, self.monto)
+        
     
         
         

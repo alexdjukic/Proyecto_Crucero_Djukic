@@ -8,6 +8,7 @@ from Tour import Tour
 from Restaurante import Restaurante
 import requests
 import numpy as np
+import math
 
 def is_prime(doc_identidad,i = 2):
     aux = True
@@ -79,7 +80,8 @@ def cruceros_disponibles(cruceros):
         costo_premium = float(crucero["cost"]["premium"])
         cantidad_vip = int(crucero["capacity"]["vip"])
         costo_vip = float(crucero["cost"]["vip"])
-        barco = Crucero(nombre,ruta,fecha,n_habitaciones,cantidad_sencilla,costo_simple,cantidad_premium,costo_premium,cantidad_vip,costo_vip)
+        sells = crucero["sells"]
+        barco = Crucero(nombre,ruta,fecha,n_habitaciones,cantidad_sencilla,costo_simple,cantidad_premium,costo_premium,cantidad_vip,costo_vip,sells)
         cruceros_disponibes.append(barco)
     return cruceros_disponibes
 
@@ -265,7 +267,7 @@ def vender(barcos):
                 while aux2 == True:
                     opcion = input("Desea comprar una habitacion mas grande? ").lower()
                     if opcion == "no":
-                        rooms = round((travelers+1)/info[0])
+                        rooms = math.ceil((travelers+1)/info[0])
                         precio = info[1]*rooms
                         for crucero in barcos:
                             if crucero.Nombre() == nombre_barco:
@@ -283,79 +285,77 @@ def vender(barcos):
                     if crucero.Nombre() == nombre_barco:
                         room = crucero.Room(room_type,rooms)
                         aux = False
-            if seleccion == "2":
-                room_type = "premium"
-                for crucero in barcos:
-                    if crucero.Nombre() == nombre_barco:
-                        info = crucero.Room_Info(room_type)
-                print(f"""------ Informacion del tipo de cuarto ------
-                            Capacidad: {info[0]} personas
-                            Precio: {info[1]}$
-                             Posee servicio al Cuarto """)
-                if travelers+1 > info[0]:
-                    print("Debera comprar multiples habitaciones de este tipo")
-                    aux2 = True
-                    while aux2 == True:
-                        opcion = input("Desea comprar una habitacion mas grande? ").lower()
-                        if opcion == "no":
-                            rooms = round((travelers+1)/info[0])
-                            precio = info[1]*rooms
-                            for crucero in barcos:
-                                if crucero.Nombre() == nombre_barco:
-                                    room = crucero.Room(room_type,rooms)
+        if seleccion == "2":
+            room_type = "premium"
+            for crucero in barcos:
+                if crucero.Nombre() == nombre_barco:
+                    info = crucero.Room_Info(room_type)
+            print(f"""------ Informacion del tipo de cuarto ------
+                        Capacidad: {info[0]} personas
+                        Precio: {info[1]}$
+                        Posee Vista el mar""")
+            if travelers+1 > info[0]:
+                print("Debera comprar multiples habitaciones de este tipo")
+                aux2 = True
+                while aux2 == True:
+                    opcion = input("Desea comprar una habitacion mas grande? ").lower()
+                    if opcion == "no":
+                        rooms = math.ceil((travelers+1)/info[0])
+                        precio = info[1]*rooms
+                        for crucero in barcos:
+                            if crucero.Nombre() == nombre_barco:
+                                room = crucero.Room(room_type,rooms)
 
-                                aux2 = False
-                                aux = False
-                        elif opcion == "si":
-                            aux2 = False
-                        else:
-                            print("Introduzca si o no")
-                else:
-                    rooms = 1
-                    precio = info[1]
-                    for crucero in barcos:
-                        if crucero.Nombre() == nombre_barco:
-                            room = crucero.Room(room_type,rooms)
-                    aux = False
-            if seleccion == "3":
-                room_type = "vip"
+                        aux2 = False
+                        aux = False
+                    elif opcion == "si":
+                        aux2 = False
+                    else:
+                        print("Introduzca si o no")
+            else:
+                rooms = 1
+                precio = info[1]
                 for crucero in barcos:
                     if crucero.Nombre() == nombre_barco:
-                        info = crucero.Room_Info(room_type)
-                print(f"""------ Informacion del tipo de cuarto ------
-                            Capacidad: {info[0]} personas
-                            Precio: {info[1]}$
-                            Posee servicio al Cuarto """)
-                if travelers+1 > info[0]:
-                    print("Debera comprar multiples habitaciones de este tipo")
-                    aux2 = True
-                    while aux2 == True:
-                        opcion = input("Desea comprar una habitacion mas grande? ").lower()
-                        if opcion == "no":
-                            rooms = int((travelers+1)/info[0])
-                            precio = info[1]*rooms
-                            for crucero in barcos:
-                                if crucero.Nombre() == nombre_barco:
-                                    room = crucero.Room(room_type,rooms)
-                            aux2 = False
-                            aux = False
-                        elif opcion == "si":
-                            aux2 = False
-                        else:
-                            print("Introduzca si o no")
-                else:
-                    rooms = 1
-                    precio = info[1]
-                    for crucero in barcos:
-                        if crucero.Nombre() == nombre_barco:
-                            room = crucero.Room(room_type,rooms)
-                    aux = False
+                        room = crucero.Room(room_type,rooms)
+                aux = False
+        if seleccion == "3":
+            room_type = "vip"
+            for crucero in barcos:
+                if crucero.Nombre() == nombre_barco:
+                    info = crucero.Room_Info(room_type)
+            print(f"""------ Informacion del tipo de cuarto ------
+                        Capacidad: {info[0]} personas
+                        Precio: {info[1]}$
+                        Posee la capacidad de hacer fiestas """)
+            if travelers+1 > info[0]:
+                print("Debera comprar multiples habitaciones de este tipo")
+                aux2 = True
+                while aux2 == True:
+                    opcion = input("Desea comprar una habitacion mas grande? ").lower()
+                    if opcion == "no":
+                        rooms = math.ceil((travelers+1)/info[0])
+                        precio = info[1]*rooms
+                        for crucero in barcos:
+                            if crucero.Nombre() == nombre_barco:
+                                room = crucero.Room(room_type,rooms)
+                        aux2 = False
+                        aux = False
+                    elif opcion == "si":
+                        aux2 = False
+                    else:
+                        print("Introduzca si o no")
+            else:
+                rooms = 1
+                precio = info[1]
+                for crucero in barcos:
+                    if crucero.Nombre() == nombre_barco:
+                        room = crucero.Room(room_type,rooms)
+                aux = False
     
     if len(side_travelers) == 0:
         descuento = descuentos(precio,main_traveler[2],main_traveler[1])
-        precio -= descuento
-        preico = round(precio)
-        cliente = Cliente(main_traveler[0],main_traveler[1],main_traveler[2],nombre_barco,room,precio,descuento)
+        cliente = Cliente(main_traveler[0],main_traveler[2],main_traveler[1],nombre_barco,room,precio,descuento)
         clientes.append(cliente)
         return clientes
     
@@ -373,27 +373,16 @@ def vender(barcos):
                 habitacion = room[h]
             else:
                 habitacion = room[h]
-            cliente = Cliente(name,edad,dni,nombre_barco,habitacion,price,discount)
+            cliente = Cliente(name,dni,edad,nombre_barco,habitacion,price,discount)
             clientes.append(cliente)
             p += 1
             descuento = descuentos(precio,side_travelers[i][2],side_travelers[i][1])
-            precio -= descuento
                            
-        cliente = Cliente(main_traveler[0],main_traveler[1],main_traveler[2],nombre_barco,habitacion,precio,descuento)
+        cliente = Cliente(main_traveler[0],main_traveler[2],main_traveler[1],nombre_barco,habitacion,precio,descuento)
         clientes.append(cliente)
         return clientes
     
     
-        
-
-
-
-
-                    
-
-
-
-
 
 def vender_tour(clientes,barcos):
     aux = True
@@ -451,9 +440,14 @@ def vender_tour(clientes,barcos):
                     print("Introduzca un numero de perosnas valido")
             
             nombre = "Tour Puerto"
+            for cliente in clientes:
+                for tour in tours:
+                    if nombre == tour.Nombre() and dni == cliente.DNI():
+                        cliente.Monto(tour,personas)
             for tour in tours:
                 if nombre == tour.Nombre():
                     return tour.Cupos(personas)
+                
         elif seleccion == 2:
             aux2 = True
             while aux2 == True:
@@ -465,6 +459,10 @@ def vender_tour(clientes,barcos):
                     print("Introduzca un numero de perosnas valido")
             
             nombre = "Degustacion"
+            for cliente in clientes:
+                for tour in tours:
+                    if nombre == tour.Nombre() and dni == cliente.DNI():
+                        cliente.Monto(tour,personas)
             for tour in tours:
                 if nombre == tour.Nombre():
                     return tour.Cupos(personas)
@@ -479,6 +477,10 @@ def vender_tour(clientes,barcos):
                     print("Introduzca un numero de perosnas valido")
             
             nombre = "Trote"
+            for cliente in clientes:
+                for tour in tours:
+                    if nombre == tour.Nombre() and dni == cliente.DNI():
+                        cliente.Monto(tour,personas)
             for tour in tours:
                 if nombre == tour.Nombre():
                     return tour.Cupos(personas)
@@ -493,6 +495,10 @@ def vender_tour(clientes,barcos):
                     print("Introduzca un numero de perosnas valido")
             
             nombre = "Lugares Historicos"
+            for cliente in clientes:
+                for tour in tours:
+                    if nombre == tour.Nombre() and dni == cliente.DNI():
+                        cliente.Monto(tour,personas)
             for tour in tours:
                 if nombre == tour.Nombre():
                     return tour.Cupos(personas)
@@ -568,6 +574,8 @@ def main():
                 aux = False
             elif opcion == "2":      
                 print(vender_tour(clientes,barcos))
+                for cliente in clientes:
+                    print(cliente.Factura())
                 aux = False
             elif opcion == "3":
                 print(restaurante(barcos))

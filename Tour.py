@@ -7,6 +7,10 @@ class Tour():
     
     def Nombre(self):
         return self.tipo
+    
+    def Precio(self,personas):
+        return self.precio * personas
+
 
     def Cupos(self,clientes):
         if self.capacidad == 0:

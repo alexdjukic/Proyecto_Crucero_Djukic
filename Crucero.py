@@ -1,7 +1,7 @@
 from Tour import Tour
 from Restaurante import Restaurante
 class Crucero():
-    def __init__(self,nombre,ruta,fecha,n_habitacion,capa_simple,costo_simple,capa_premium,costo_premium,capa_vip,costo_vip,simple = [],premium = [],vip = [],tours = [],restaurante = False):
+    def __init__(self,nombre,ruta,fecha,n_habitacion,capa_simple,costo_simple,capa_premium,costo_premium,capa_vip,costo_vip,sells,simple = [],premium = [],vip = [],tours = [],restaurante = False):
         self.nombre = nombre
         self.ruta = ruta
         self.fecha = fecha
@@ -12,6 +12,7 @@ class Crucero():
         self.costo_premium = costo_premium
         self.capa_vip = capa_vip
         self.costo_vip = costo_vip
+        self.sells = sells
         self.simple = simple
         self.premium = premium
         self.vip = vip
@@ -39,6 +40,7 @@ class Crucero():
     
     def Ruta(self):
         return self.ruta
+    
     def Room_Info(self,tipo):
         room_info = []
         if tipo == "simple":
@@ -125,21 +127,12 @@ class Crucero():
                         print(cell, end=' ')
                     print()
                 
-                print(k,rooms)
-                
         if f == False:
             return "La habitacion ya esta ocupada"
         
         else:
             return habitaciones
             
-
-                
-
-
-        
-        
-
 
     def Tours(self):
         if len(self.tours) == 0:
