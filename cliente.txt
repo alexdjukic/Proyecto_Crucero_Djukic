@@ -1,0 +1,1 @@
+cliente;a d;23;23;la reina isabel;premium;4;99.99;C;7;7;99.99;9.999;False

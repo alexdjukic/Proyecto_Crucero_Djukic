@@ -7,7 +7,6 @@ from Cliente import Cliente
 from Tour import Tour
 from Restaurante import Restaurante
 import requests
-import numpy as np
 import math
 
 def is_prime(doc_identidad,i = 2):
@@ -82,6 +81,7 @@ def cruceros_disponibles(cruceros):
         costo_vip = float(crucero["cost"]["vip"])
         sells = crucero["sells"]
         barco = Crucero(nombre,ruta,fecha,n_habitaciones,cantidad_sencilla,costo_simple,cantidad_premium,costo_premium,cantidad_vip,costo_vip,sells)
+        barco.Create_rooms()
         cruceros_disponibes.append(barco)
     return cruceros_disponibes
 
@@ -198,6 +198,7 @@ def vender(barcos):
                 if crucero.Nombre().lower() == nombre:
                     found = True
                     nombre_barco = crucero.Nombre()
+                    crucero.Tickets()
                     print(crucero.Info_Barco())
                     aux = False
             if found == False:
@@ -211,6 +212,7 @@ def vender(barcos):
                 if ruta[0].lower() == salida:
                     found = True
                     nombre_barco = crucero.Nombre()
+                    crucero.Tickets()
                     print(crucero.Info_Barco())
                     aux = False
             if found == False:
@@ -225,6 +227,7 @@ def vender(barcos):
                 if i+1 == seleccion:
                     found = True
                     nombre_barco = crucero.Nombre()
+                    crucero.Tickets()
                     print(f" Usted selecciono {crucero.Info_Barco()}")
                     aux = False
             if found == False:
@@ -352,10 +355,27 @@ def vender(barcos):
                     if crucero.Nombre() == nombre_barco:
                         room = crucero.Room(room_type,rooms)
                 aux = False
-    
+    aux = True
+    while aux == True:
+        tour = input("Desea comprar un tour?: ").lower()
+        if tour == "si":
+            precio_tour = vender_tour(nombre_barco,travelers+1,barcos)
+            tour = True
+            aux = False
+        elif tour == "no":
+            tour = False
+            aux = False
+        else:
+            print("Introduzca una opcion valida")
+
     if len(side_travelers) == 0:
         descuento = descuentos(precio,main_traveler[2],main_traveler[1])
-        cliente = Cliente(main_traveler[0],main_traveler[2],main_traveler[1],nombre_barco,room,precio,descuento)
+        if tour == True:
+            precio += precio_tour
+        for habitacion in room:
+            print(habitacion.Info())
+
+        cliente = Cliente(main_traveler[0],main_traveler[2],main_traveler[1],nombre_barco,room,precio,descuento,tour)
         clientes.append(cliente)
         return clientes
     
@@ -373,46 +393,24 @@ def vender(barcos):
                 habitacion = room[h]
             else:
                 habitacion = room[h]
-            cliente = Cliente(name,dni,edad,nombre_barco,habitacion,price,discount)
+            cliente = Cliente(name,dni,edad,nombre_barco,habitacion,price,discount,tour)
             clientes.append(cliente)
             p += 1
             descuento = descuentos(precio,side_travelers[i][2],side_travelers[i][1])
-                           
-        cliente = Cliente(main_traveler[0],main_traveler[2],main_traveler[1],nombre_barco,habitacion,precio,descuento)
+        if tour == True:
+            precio += precio_tour 
+        for habitacion in room:
+            print(habitacion.Info())                  
+        cliente = Cliente(main_traveler[0],main_traveler[2],main_traveler[1],nombre_barco,room_type,habitacion,precio,descuento)
         clientes.append(cliente)
         return clientes
     
     
 
-def vender_tour(clientes,barcos):
-    aux = True
-    while aux == True:
-        barco = input("Introduzca el nombre de su barco: ").lower()
-        if barco.isalpha:
-            aux = False
-        else:
-            print("Introduzca un nombre de barco valido")
+def vender_tour(nombre_barco,travelers,barcos):
     for crucero in barcos:
-        if barco == crucero.Nombre():
+        if nombre_barco == crucero.Nombre():
             tours = crucero.Tours()
-    aux = True
-    while aux == True:
-        try:
-            dni = int(input("Introduzca su dni: "))
-            if dni > 0:
-                aux = False
-            else:
-                print("Introduzca un dni valido")
-        except ValueError:
-            print("Introduzca un dni valido")
-    found = False
-    for cliente in clientes:
-        if dni == cliente.DNI() and barco == cliente.Crucero():
-            found = True
-
-    if found == False:
-        print("El cliente no esta registrado en ningun crucero")
-    
     aux = True
     while aux == True:
         print("""------- Tipos de tour disponibles -------
@@ -440,13 +438,14 @@ def vender_tour(clientes,barcos):
                     print("Introduzca un numero de perosnas valido")
             
             nombre = "Tour Puerto"
-            for cliente in clientes:
-                for tour in tours:
-                    if nombre == tour.Nombre() and dni == cliente.DNI():
-                        cliente.Monto(tour,personas)
             for tour in tours:
                 if nombre == tour.Nombre():
-                    return tour.Cupos(personas)
+                    precio = tour.Cupos(personas)
+                    if precio.isdecimal:
+                        precio = int(precio)
+                        return precio
+                    else:
+                        print(precio)
                 
         elif seleccion == 2:
             aux2 = True
@@ -459,13 +458,15 @@ def vender_tour(clientes,barcos):
                     print("Introduzca un numero de perosnas valido")
             
             nombre = "Degustacion"
-            for cliente in clientes:
-                for tour in tours:
-                    if nombre == tour.Nombre() and dni == cliente.DNI():
-                        cliente.Monto(tour,personas)
             for tour in tours:
                 if nombre == tour.Nombre():
-                    return tour.Cupos(personas)
+                   precio = tour.Cupos(personas)
+                   if precio.isdecimal:
+                       precio = int(precio)
+                       return precio
+                   else:
+                        print(precio)
+        
         elif seleccion == 3:
             aux2 = True
             while aux2 == True:
@@ -477,13 +478,15 @@ def vender_tour(clientes,barcos):
                     print("Introduzca un numero de perosnas valido")
             
             nombre = "Trote"
-            for cliente in clientes:
-                for tour in tours:
-                    if nombre == tour.Nombre() and dni == cliente.DNI():
-                        cliente.Monto(tour,personas)
             for tour in tours:
                 if nombre == tour.Nombre():
-                    return tour.Cupos(personas)
+                    precio = tour.Cupos(personas)
+                    if precio.isdecimal:
+                        precio = int(precio)
+                        return precio
+                    else:
+                        print(precio) 
+        
         elif seleccion == 4:
             aux2 = True
             while aux2 == True:
@@ -495,18 +498,52 @@ def vender_tour(clientes,barcos):
                     print("Introduzca un numero de perosnas valido")
             
             nombre = "Lugares Historicos"
-            for cliente in clientes:
-                for tour in tours:
-                    if nombre == tour.Nombre() and dni == cliente.DNI():
-                        cliente.Monto(tour,personas)
             for tour in tours:
                 if nombre == tour.Nombre():
-                    return tour.Cupos(personas)
+                    precio = tour.Cupos(personas)
+                    if precio.isdecimal:
+                        precio = int(precio)
+                        return precio
+                    else:
+                        print(precio)
 
         else:
             print("Seleccione una opcion valida")
-                
-            
+
+def read(txt_file):
+    lista = []
+    with open(txt_file,"r") as t:
+        for line in t:
+            line = line.strip()
+            lista.append(line.split(";"))
+    print(lista)
+    saves = []
+    for i in range(len(lista)):
+        if lista[i][0] == "cliente":
+            nombre = lista[i][1]
+            identidad = int(lista[i][2])
+            edad = int(lista[i][3])
+            nombre_barco = lista[i][4]
+            habitacion = []
+            habitacion.append(lista[i][5])
+            habitacion.append(lista[i][6])
+            habitacion.append(lista[i][7])
+            habitacion.append(lista[i][8])
+            habitacion.append(lista[i][9])
+            habitacion.append(lista[i][10])
+            monto = float(lista[i][11])
+            descuento = float(lista[i][12])
+            tour = bool(lista[i][13])
+            cliente = Cliente(nombre,identidad,edad,nombre_barco,habitacion,monto,descuento,tour)
+            cliente.Habitacion()
+            saves.append(cliente)
+    return saves
+
+
+def write(lista):
+    for item in lista:
+        item.Write_data()  
+
 def restaurante(barcos):
     aux = True
     found = False
@@ -574,22 +611,25 @@ def main():
     fin = False
     cruceros = crucero_API()
     barcos = cruceros_disponibles(cruceros)
+    clientes = read("cliente.txt")
+    print(clientes)
+    for barco in barcos:
+        for cliente in clientes:
+            info = cliente.Ocupar()
+            if barco.Nombre() == info[0]:
+                barco.Ocupar_Room(info[1],info[2])
     while fin == False:
         print("BIENVENIDO A SAMAN CRUCEROS")
         aux = True
         while aux == True:
-            opcion = input("Introduzca (1) para comprar un boleto, (2) para comprar un tour o (3) para el modulo de restaurantes: ")
+            opcion = input("Introduzca (1) para comprar un boleto, (2) para el modulo de restaurantes: ")
             if opcion == "1":       
-                clientes = vender(barcos)
-                for cliente in clientes:
-                    print(cliente.Factura())
+                personas = vender(barcos)
+                for persona in personas:
+                    print(persona.Factura())
+                    clientes.append(persona)
                 aux = False
-            elif opcion == "2":      
-                print(vender_tour(clientes,barcos))
-                for cliente in clientes:
-                    print(cliente.Factura())
-                aux = False
-            elif opcion == "3":
+            elif opcion == "2":
                 print(restaurante(barcos))
                 aux = False
             else:
@@ -598,6 +638,7 @@ def main():
         while aux == True:
             opcion = input("Desea introducir a otro cliente o realizar otra funcion dentro del programa?: ").lower()
             if opcion == "no":
+                write(clientes)
                 aux = False
                 fin = True
             elif opcion == "si":

@@ -1,7 +1,11 @@
 from Tour import Tour
 from Restaurante import Restaurante
+from Sencilla import Sencilla
+from Premium import Premium
+from Vip import Vip
+
 class Crucero():
-    def __init__(self,nombre,ruta,fecha,n_habitacion,capa_simple,costo_simple,capa_premium,costo_premium,capa_vip,costo_vip,sells,simple = [],premium = [],vip = [],tours = [],restaurante = False):
+    def __init__(self,nombre,ruta,fecha,n_habitacion,capa_simple,costo_simple,capa_premium,costo_premium,capa_vip,costo_vip,sells,ticket = 0,simple = [],premium = [],vip = [],tours = [],restaurante = False):
         self.nombre = nombre
         self.ruta = ruta
         self.fecha = fecha
@@ -13,6 +17,7 @@ class Crucero():
         self.capa_vip = capa_vip
         self.costo_vip = costo_vip
         self.sells = sells
+        self.ticket = ticket
         self.simple = simple
         self.premium = premium
         self.vip = vip
@@ -35,6 +40,9 @@ class Crucero():
                     Costo habitaciones VIP: {self.costo_vip}$
                     
                     """
+    def Tickets(self):
+        self.ticket += 1
+    
     def Nombre(self):
         return self.nombre.lower()
     
@@ -56,7 +64,13 @@ class Crucero():
             room_info.append(self.costo_vip)
             return room_info
         
-        
+    def Create_rooms(self):
+        tupla = self.n_habitacion["simple"]
+        self.simple = self.Room_Map(tupla)
+        tupla = self.n_habitacion["premium"]
+        self.premium = self.Room_Map(tupla)
+        tupla = self.n_habitacion["vip"]
+        self.vip = self.Room_Map(tupla)
 
     def Room_Map(self,tupla):
         matrix = []
@@ -76,17 +90,11 @@ class Crucero():
                     if j % 2 == 0:
                         columna.append(pasillo)
                     else:
-                        columna.append(f"{letras[k]}{i+1}")
+                        columna.append(f"{letras[k]}.{i+1}")
                         k += 1
         return matrix
     
     def Room(self,room_type,rooms):
-        tupla = self.n_habitacion["simple"]
-        self.simple = self.Room_Map(tupla)
-        tupla = self.n_habitacion["premium"]
-        self.premium = self.Room_Map(tupla)
-        tupla = self.n_habitacion["vip"]
-        self.vip = self.Room_Map(tupla)
 
         if room_type== "simple":
             matrix = self.simple
@@ -131,8 +139,63 @@ class Crucero():
             return "La habitacion ya esta ocupada"
         
         else:
-            return habitaciones
+            rooms = []
+            for habitacion in habitaciones:
+                if room_type == "simple":
+                    tipo = room_type
+                    capacidad = self.capa_simple
+                    costo = self.costo_simple
+                    hab = habitacion.split(".")
+                    pasillo = hab[0]
+                    numero = hab[1]
+                    simple = Sencilla(tipo,capacidad,costo,pasillo,numero,True)
+                    rooms.append(simple)
+                elif room_type == "premium":
+                    tipo = room_type
+                    capacidad = self.capa_premium
+                    costo = self.costo_premium
+                    hab = habitacion.split(".")
+                    pasillo = hab[0]
+                    numero = hab[1]
+                    premium = Premium(tipo,capacidad,costo,pasillo,numero,True)
+                    rooms.append(premium)
+                elif room_type == "vip":
+                    tipo = room_type
+                    capacidad = self.capa_vip
+                    costo = self.costo_vip
+                    hab = habitacion.split(".")
+                    pasillo = hab[0]
+                    numero = hab[1]
+                    vip = Vip(tipo,capacidad,costo,pasillo,numero,True)
+                    rooms.append(vip)
+            return rooms
+
+    def Ocupar_Room(self,tipo,numero):
+        if tipo == "simple":
+            matrix = self.simple
+            for i in range(len(matrix)):
+                for j in range(len(matrix[i])):
+                    if matrix[i][j] == numero:
+                        matrix[i][j] = "X"
+            self.simple = matrix
             
+        elif tipo == "premium":
+            matrix = self.premium
+            for i in range(len(matrix)):
+                for j in range(len(matrix[i])):
+                    if matrix[i][j] == numero:
+                        matrix[i][j] = "X"
+            self.premium = matrix
+            
+        if tipo == "vip":
+            matrix = self.vip
+            for i in range(len(matrix)):
+                for j in range(len(matrix[i])):
+                    if matrix[i][j] == numero:
+                        matrix[i][j] = "X"
+            self.vip = matrix
+            
+        
 
     def Tours(self):
         if len(self.tours) == 0:
