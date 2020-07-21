@@ -41,7 +41,7 @@ class Crucero():
                     
                     """
     def Tickets(self):
-        self.ticket += 1
+        self.ticket = self.ticket + 1
     
     def Nombre(self):
         return self.nombre.lower()
@@ -122,7 +122,28 @@ class Crucero():
                 aux = False
             else:
                 f = False
-                seleccion = input("Introduzca la letra en mayuscula y el numero de habitacion que desea comprar: ")
+                seleccion = []
+                aux2 = True
+                while aux2 == True:
+                    pasillo = input("seleccione la letra del pasillo de la habitacion: ").upper()
+                    if pasillo.isalpha:
+                        seleccion.append(pasillo)
+                        aux2 = False
+                    else:
+                        print("introduzca una letra valida")
+                aux2 = True
+                while aux2 == True:
+                    try:
+                        numero = int(input("seleccione el numero de la habitacion: "))
+                        if numero > 0 and numero < len(matrix)+1:
+                            numero = str(numero)
+                            seleccion.append(numero)
+                            aux2 = False
+                        else:
+                            print("selecione un numero valido")
+                    except ValueError:
+                        print("seleccione un numero valido")
+                seleccion = ".".join(seleccion)
                 k += 1
                 for i in range(len(matrix)):
                     for j in range(len(matrix[i])):
@@ -212,13 +233,16 @@ class Crucero():
             return self.tours
     
     def Restaurante(self):
-        if self.restaurante == False:
-            self.restaurante = Restaurante()
-            return self.restaurante
-        else:
-            return self.restaurante
+        self.restaurante = Restaurante()
+        return self.restaurante
     
     def Sells(self):
         return self.sells
+    
+    def Write(self):
+        self.restaurante.Data(self.nombre)
+    
+    def Stats(self):
+        return self.ticket
 
     

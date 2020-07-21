@@ -26,11 +26,11 @@ class Premium(Habitacion):
         return habitacion
     
     def Datos(self):
-        room_data = []
-        room_data.append(self.tipo)
-        room_data.append(str(self.capacidad))
-        room_data.append(str(self.costo))
-        room_data.append(self.pasillo)
-        room_data.append(self.numero)
-        room_data.append(str(self.ocupada))
-        return room_data
+        data = []
+        data.append(self.tipo)
+        data.append(str(self.capacidad))
+        data.append(str(self.costo))
+        data.append(self.pasillo)
+        data.append(self.numero)
+        return data
+        

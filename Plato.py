@@ -36,4 +36,13 @@ class Plato():
             self.cantidad = mod
             return "se ha cambiado la cantidad del platillo o combo"
     
+    def Write_data(self,barco):
+        with open('menu.txt','a') as m:
+            m.write("comida" + ";")
+            m.write(barco + ";")
+            m.write(self.nombre + ";")
+            m.write(str(self.precio) + ";")
+            m.write(str(self.cantidad) + ";")
+            m.write(str(self.ventas) + ";")
+            m.write("\n")
         

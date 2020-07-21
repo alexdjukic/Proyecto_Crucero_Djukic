@@ -13,9 +13,13 @@ class Cliente():
         self.descuento = descuento
         self.tour = tour
     
+    def Nombre(self):
+        return self.nombre
+
     def Factura(self):
         iva = self.monto * 0.16
         total = self.monto + iva - self.descuento
+        habitacion = self.habitacion.Type()
         return """ ------ Factura del Cliente ------
                 Nombre: {}
                 Documento de Identidad : {}
@@ -25,7 +29,7 @@ class Cliente():
                 Descuento : {}$
                 IVA: {}$
                 Monto total a pagar: {}$
-                """.format(self.nombre,self.identidad,self.edad,self.habitacion,self.monto,self.descuento,iva,total)
+                """.format(self.nombre,self.identidad,self.edad,habitacion,self.monto,self.descuento,iva,total)
 
     def DNI(self):
         return self.identidad
@@ -70,7 +74,33 @@ class Cliente():
         info.append(numero)
         return info
 
+    def Stats(self):
+        stats = []
+        iva = self.monto * 0.16
+        total = self.monto + iva - self.descuento
+        stats.append(total)
+        stats.append(self.nombre)
+        stats.append(self.tour)
+        stats.append(self.crucero)
+        return stats
+    
+    def Info(self):
+        iva = self.monto * 0.16
+        total = self.monto + iva - self.descuento
+        habitacion = self.habitacion.Type()
+        return """ ------ Informacion del Cliente ------
+                Nombre: {}
+                Documento de Identidad : {}
+                Edad: {}
+                Habitacion: {}
+                Monto a Pagar: {}$
+                Descuento : {}$
+                IVA: {}$
+                Monto total a pagar: {}$
+                """.format(self.nombre,self.identidad,self.edad,habitacion,self.monto,self.descuento,iva,total)
 
+
+    
     def Write_data(self):
         with open('cliente.txt','a') as c:
             c.write("cliente" + ";")
@@ -78,13 +108,13 @@ class Cliente():
             c.write(str(self.identidad) + ";")
             c.write(str(self.edad)+ ";")
             c.write(self.crucero + ";" )
-            habitacion = (self.habitacion[0]).Datos()
-            c.write(habitacion[0] + ";")
-            c.write(habitacion[1] + ";")
-            c.write(habitacion[2] + ";")
-            c.write(habitacion[3] + ";")
-            c.write(habitacion[4] + ";")
-            c.write(habitacion[5] + ";")
+            habitacion = self.habitacion
+            hab = habitacion.Datos()
+            c.write(hab[0] + ";")
+            c.write(hab[1] + ";")
+            c.write(hab[2] + ";")
+            c.write(hab[3] + ";")
+            c.write(hab[4] + ";")
             c.write(str(self.monto) + ";")
             c.write(str(self.descuento) + ";")
             c.write(str(self.tour))

@@ -107,9 +107,6 @@ class Restaurante():
                     Cantidad comprada: {cantidad}
                     '''
                 
-        
-
-    
     def Eliminar_Platillo(self):
         for platillo in self.menu:
             print(platillo.Info())
@@ -126,8 +123,6 @@ class Restaurante():
             return "Se ha eliminado el platillo"
         else:
             return "El platillo no se encuentra en el menu"
-    
-    
     
     def Modificar(self):
         for platillo in self.menu:
@@ -168,7 +163,18 @@ class Restaurante():
                     return "Todo listo"
                 else:
                     print("introduzca una opcion valida")
-                        
+    
+    def Txt_platillos(self,lista):
+        nombre = lista[0]
+        precio = lista[1]
+        cantidad = lista[2]
+        ventas = lista[3]
+        platillo = Plato(nombre,precio,cantidad,ventas)
+        self.menu.append(platillo)
+
+    def Data(self,barco):
+        for platillo in self.menu:
+            platillo.Write_data(barco)
 
 
 
